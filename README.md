@@ -53,6 +53,7 @@ Abaixo, listamos os possíveis **_status codes_** esperados como resposta da API
 // 404 (Not Found) = o servidor não pode encontrar o recurso solicitado
 // 500 (Internal Server Error) = erro inesperado do servidor
 ```
+---
 
 <details>
 <summary>1ª Sprint</summary>
