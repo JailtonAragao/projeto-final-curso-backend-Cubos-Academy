@@ -1,9 +1,9 @@
-# desafio-backend-04-pdv
+# desafio-backend-05-pdv
 ![](https://i.imgur.com/xG74tOh.png)
 
-# Desafio Módulo 4 - Backend
+# Desafio Módulo 5 - Backend
 
-Seja bem vindo(a) ao desafio do módulo 4.
+Seja bem vindo(a) ao desafio do módulo 5.
 
 Sua tarefa como desenvolvedor(a) será criar uma API para um PDV (Frente de Caixa). Esse será um projeto piloto, ou seja, no futuro outras funcionalidades serão implementadas.
 
@@ -205,4 +205,4 @@ Fazer deploy do projeto no Heroku e disponibilizar a URL para o líder técnico.
 -   [Deploy](https://aulas.cubos.academy/turma/8e525417-a33a-46f6-9476-9fcdfe375f99/aulas/36da6c7a-cd72-4519-8d18-54b9e873be1f)
 -   [Revisão de deploy](https://aulas.cubos.academy/turma/8e525417-a33a-46f6-9476-9fcdfe375f99/aulas/5d3ea2e5-e8da-4714-a4a2-5492ba69d096)
 
-###### tags: `back-end` `módulo 4` `nodeJS` `PostgreSQL` `API REST` `desafio`
+###### tags: `back-end` `módulo 5` `nodeJS` `PostgreSQL` `API REST` `desafio`
