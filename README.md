@@ -195,3 +195,13 @@ Fazer deploy do projeto no Heroku e disponibilizar a URL para o líder técnico.
 </details>
 
 ---
+
+## Aulas úteis:
+
+-   [Git e fluxo de trabalho em equipe](https://aulas.cubos.academy/turma/8e525417-a33a-46f6-9476-9fcdfe375f99/aulas/67078ad8-6e11-4d57-a7c1-c1c465cb919e)
+-   [Envio de e-mails](https://aulas.cubos.academy/turma/8e525417-a33a-46f6-9476-9fcdfe375f99/aulas/0a069681-82f6-4d71-a379-b870c8a9ef80)
+-   [Validações e boas práticas](https://aulas.cubos.academy/turma/8e525417-a33a-46f6-9476-9fcdfe375f99/aulas/34864c9a-5db4-42d5-9fb7-f8103b8bfd0b)
+-   [Deploy](https://aulas.cubos.academy/turma/8e525417-a33a-46f6-9476-9fcdfe375f99/aulas/36da6c7a-cd72-4519-8d18-54b9e873be1f)
+-   [Revisão de deploy](https://aulas.cubos.academy/turma/8e525417-a33a-46f6-9476-9fcdfe375f99/aulas/5d3ea2e5-e8da-4714-a4a2-5492ba69d096)
+
+###### tags: `back-end` `módulo 4` `nodeJS` `PostgreSQL` `API REST` `desafio`
