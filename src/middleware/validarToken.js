@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const knex = require('knex');
 
 const fraseSecreta = require('../chave_secreta_jwt');
-// const { query } = require('../bancodedados/conexao');
+
 
 const validarToken = async (req, res, next) => {
     const { authorization: autorizacao } = req.headers;
