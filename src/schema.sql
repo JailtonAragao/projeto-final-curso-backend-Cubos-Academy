@@ -1,7 +1,7 @@
 create table usuarios (
 	id serial primary key,
 	nome varchar(100) not null,
-	email varchar(100) not null,
+	email varchar(100) not null unique,
 	senha text not null
 );
 
