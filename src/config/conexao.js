@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const knex = require('knex')({
     client: 'pg',
     connection: {
@@ -5,10 +7,7 @@ const knex = require('knex')({
         host: process.env.DB_HOST,
         database: process.env.DB_DATABASE,
         password: process.env.DB_PASSWORD,
-        port: 5432,
-        ssl: {
-            rejectUnauthorized: false
-        }
+        port: process.env.DB_PORT,
     }
 });
 
