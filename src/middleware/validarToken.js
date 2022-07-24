@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-const knex = require('knex');
+//const knex = require('knex');
+const knex = require('../config/conexao');
 
 const fraseSecreta = require('../chave_secreta_jwt');
 
@@ -11,7 +12,7 @@ const validarToken = async (req, res, next) => {
     }
 
     try {
-        const token = authorization.replace('Bearer ', '').trim();
+        const token = autorizacao.replace('Bearer ', '').trim();
 
         const { id } = jwt.verify(token, fraseSecreta);
 
