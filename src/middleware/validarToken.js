@@ -11,7 +11,7 @@ const validarToken = async (req, res, next) => {
     }
 
     try {
-        const token = authorization.replace('Bearer ', '').trim();
+        const token = autorizacao.replace('Bearer ', '').trim();
 
         const { id } = jwt.verify(token, fraseSecreta);
 
