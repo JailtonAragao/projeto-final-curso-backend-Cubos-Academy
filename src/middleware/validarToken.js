@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const knex = require('knex');
+const knex = require('../config/conexao');
 
 const fraseSecreta = require('../chave_secreta_jwt');
 
