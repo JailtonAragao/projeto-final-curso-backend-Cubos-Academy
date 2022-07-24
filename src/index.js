@@ -10,9 +10,9 @@ const port = 8000;
 
 app.use(express.json());
 
-app.use(categoria);
-app.use(login);
-app.use(usuario);
+app.use('/categoria', categoria);
+app.use('/login', login);
+app.use('/usuario', usuario);
 
 
 app.listen(port, () => {

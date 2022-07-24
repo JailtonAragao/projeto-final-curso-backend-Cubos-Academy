@@ -8,7 +8,7 @@ const knex = require('knex')({
         user : 'postgres',
         password : '12345',
         database : 'pdv'
-      },
+      }
 });
 
 module.exports = knex;

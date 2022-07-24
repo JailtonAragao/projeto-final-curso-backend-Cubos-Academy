@@ -53,19 +53,25 @@ const redefinirSenha = async (req, res) => {
     }
 
     try {
-        const usuario = await knex('usuarios').where({ email }).first().debug();
+        const usuario = await knex('usuarios').where({ email }).first();
 
         if (!usuario) {
-            return res.status(404).json({ messagem: 'Usuário não encontrado' })
+            return res.status(404).json({ messagem: 'Usuário não encontrado' });
         }
 
-        // const senhaCorreta = await bcrypt.compare(senha_antiga, usuario.senha);
+        const senhaCorreta = await bcrypt.compare(senha_antiga, usuario.senha);
 
-        // console.log(true)
-
-        // if (!senhaCorreta) {
-        //     return res.status(404).json({ messagem: "Email ou senha incorretos" });
-        // }
+        if (!senhaCorreta) {
+            return res.status(404).json({ messagem: "Senha Incorreta" });
+        } else {
+            const hash = await bcrypt.hash(senha_nova, 10);
+            
+            const senhaAtualizada = await knex('usuarios').update({ senha: hash }).where('email', email);
+            
+            // TO DO IMPLEMENTAR ENVIO DE EMAILS
+            
+            return res.status(201).send();
+        }
 
     } catch (error) {
         return res.status(500).json({ menssagem: error.message });
