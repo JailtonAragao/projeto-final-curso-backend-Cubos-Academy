@@ -6,13 +6,15 @@ const usuario = require('./routes/usuarios');
 
 const app = express();
 
+const port = 8000;
+
 app.use(express.json());
 
-app.use('/categoria', categoria);
-app.use('/login', login);
-app.use('/usuario', usuario);
+app.use(categoria);
+app.use(login);
+app.use(usuario);
 
 
-app.listen(3000, () => {
-    console.log("Servidor rodando na porta http://localhost:3000");
+app.listen(port, () => {
+    console.log(`Servidor rodando na porta http://localhost:${port}`);
 });

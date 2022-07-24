@@ -39,6 +39,41 @@ const cadastrarUsuarios = async (req, res) => {
     }
 }
 
+const redefinirSenha = async (req, res) => {
+    const { email, senha_antiga, senha_nova } = req.body;
+
+    if (!email) {
+        return res.status(404).json({ messagem: 'O campo email é obrigatório' });
+    }
+    if (!senha_antiga) {
+        return res.status(404).json({ messagem: 'O campo senha_antiga é obrigatório' });
+    }
+    if (!senha_nova) {
+        return res.status(404).json({ messagem: 'O campo senha_nova é obrigatório' });
+    }
+
+    try {
+        const usuario = await knex('usuarios').where({ email }).first().debug();
+
+        if (!usuario) {
+            return res.status(404).json({ messagem: 'Usuário não encontrado' })
+        }
+
+        // const senhaCorreta = await bcrypt.compare(senha_antiga, usuario.senha);
+
+        // console.log(true)
+
+        // if (!senhaCorreta) {
+        //     return res.status(404).json({ messagem: "Email ou senha incorretos" });
+        // }
+
+    } catch (error) {
+        return res.status(500).json({ menssagem: error.message });
+    }
+    
+}
+
 module.exports = {
-    cadastrarUsuarios
+    cadastrarUsuarios,
+    redefinirSenha
 }
