@@ -13,6 +13,4 @@ app.use('/login', login);
 app.use('/usuario', usuario);
 
 
-app.listen(process.env.PORT || 3000, () => {
-    console.log(`Servidor rodando na porta ${process.env.PORT}`);
-});
+app.listen(process.env.PORT || 3000);
