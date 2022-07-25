@@ -13,5 +13,4 @@ app.use('/categoria', categoria);
 app.use('/login', login);
 app.use('/usuario', usuario);
 
-
 app.listen(process.env.PORT || 3000);
