@@ -1,9 +1,9 @@
 const express = require('express');
 
-const { listarCategoria } = require('../controller/categorias')
+const { listarCategorias } = require('../controller/categorias')
 
 const rotas = express();
 
-rotas.get('/', listarCategoria);
+rotas.get('/', listarCategorias);
 
 module.exports = rotas;
