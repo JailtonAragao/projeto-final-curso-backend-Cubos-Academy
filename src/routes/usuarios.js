@@ -2,7 +2,7 @@ const express = require('express');
 
 const validarToken = require('../middleware/validarToken');
 
-const { cadastrarUsuarios, redefinirSenham, detalharPerfil } = require('../controller/usuarios');
+const { cadastrarUsuarios, redefinirSenha, detalharPerfil } = require('../controller/usuarios');
 
 const rotas = express();
 
