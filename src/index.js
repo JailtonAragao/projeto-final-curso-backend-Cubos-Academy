@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config();
 
 const categoria = require('./routes/categorias');
 const login = require('./routes/login');
