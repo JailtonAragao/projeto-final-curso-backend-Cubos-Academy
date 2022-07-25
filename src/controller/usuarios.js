@@ -63,6 +63,8 @@ const redefinirSenha = async (req, res) => {
 
         if (!senhaCorreta) {
             return res.status(404).json({ messagem: "Senha Incorreta" });
+        } else if (senhaCorreta === senha_nova) {
+            return res.status(404).json({ messagem: 'A senha nova tem que ser diferente da senha antiga' });
         } else {
             const hash = await bcrypt.hash(senha_nova, 10);
 
