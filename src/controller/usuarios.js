@@ -65,12 +65,12 @@ const redefinirSenha = async (req, res) => {
             return res.status(404).json({ messagem: "Senha Incorreta" });
         } else {
             const hash = await bcrypt.hash(senha_nova, 10);
-            
+
             const senhaAtualizada = await knex('usuarios').update({ senha: hash }).where('email', email);
-            
+
             // TO DO IMPLEMENTAR ENVIO DE EMAILS
-            
-            return res.status(201).send();
+
+            return res.status(204).send();
         }
 
     } catch (error) {
@@ -79,7 +79,7 @@ const redefinirSenha = async (req, res) => {
 }
 
 const detalharPerfil = async (req, res) => {
-        return res.status(200).json(req.usuario);
+    return res.status(200).json(req.usuario);
 }
 
 module.exports = {
