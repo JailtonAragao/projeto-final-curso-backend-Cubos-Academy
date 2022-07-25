@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config();
 
 const categoria = require('./routes/categorias');
 const login = require('./routes/login');
@@ -6,15 +7,10 @@ const usuario = require('./routes/usuarios');
 
 const app = express();
 
-const port = 8000;
-
 app.use(express.json());
 
 app.use('/categoria', categoria);
 app.use('/login', login);
 app.use('/usuario', usuario);
 
-
-app.listen(port, () => {
-    console.log(`Servidor rodando na porta http://localhost:${port}`);
-});
+app.listen(process.env.PORT || 3000);

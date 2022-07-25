@@ -76,10 +76,14 @@ const redefinirSenha = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ menssagem: error.message });
     }
-    
+}
+
+const detalharPerfil = async (req, res) => {
+        return res.status(200).json(req.usuario);
 }
 
 module.exports = {
     cadastrarUsuarios,
-    redefinirSenha
+    redefinirSenha,
+    detalharPerfil
 }

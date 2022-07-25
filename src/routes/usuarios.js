@@ -1,7 +1,8 @@
 const express = require('express');
 
 const validarToken = require('../middleware/validarToken');
-const { cadastrarUsuarios, redefinirSenha } = require('../controller/usuarios');
+
+const { cadastrarUsuarios, redefinirSenham, detalharPerfil } = require('../controller/usuarios');
 
 const rotas = express();
 
@@ -10,8 +11,7 @@ rotas.patch('/redefinir', redefinirSenha);
 
 rotas.use(validarToken);
 
-rotas.get('/',);
+rotas.get('/', detalharPerfil);
 rotas.put('/',);
-
 
 module.exports = rotas;
