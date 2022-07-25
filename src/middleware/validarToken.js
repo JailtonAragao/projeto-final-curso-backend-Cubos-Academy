@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-//const knex = require('knex');
 const knex = require('../config/conexao');
 
 const fraseSecreta = require('../chave_secreta_jwt');
@@ -29,12 +28,12 @@ const validarToken = async (req, res, next) => {
         next();
     } catch (error) {
         if (error.message === "jwt expired") {
-            return res.status(400).json('Token expirado, informar um novo')
+            return res.status(500).json('Token expirado, informar um novo')
         }
         if (error.message === "jwt malformed") {
-            return res.status(400).json('Informar um token válido')
+            return res.status(500).json('Informar um token válido')
         }
-        return res.status(400).json(error.message);
+        return res.status(500).json(error.message);
     }
 }
 
