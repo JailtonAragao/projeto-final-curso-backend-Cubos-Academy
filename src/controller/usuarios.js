@@ -86,7 +86,7 @@ const redefinirSenha = async (req, res) => {
                 from: 'Loja Pedreiro de Software <nao-responder@lojapedreirodesoftware.com>',
                 to: email,
                 subject: 'Alteração de senha',
-                text: `Olá ${nome}. Sua senha foi atualizada com sucesso`
+                text: `Olá ${usuario.nome}. Sua senha foi atualizada com sucesso`
             }
 
             nodemailer.sendMail(enviarEmail);
