@@ -17,9 +17,9 @@ const cadastrarUsuarios = async (req, res) => {
 
     try {
 
-        const emailExistente = await knex('usuarios').where({ email }).first();
+        const emailExiste = await knex('usuarios').where({ email }).first();
 
-        if (emailExistente) {
+        if (emailExiste) {
             return res.status(404).json({ messagem: 'O email informado já consta em nosso banco de dados' })
         }
 
@@ -66,30 +66,30 @@ const redefinirSenha = async (req, res) => {
     }
 
     try {
-        const usuario = await knex('usuarios').where({ email }).first();
+        const emailExiste = await knex('usuarios').where({ email }).first();
 
-        if (!usuario) {
-            return res.status(404).json({ messagem: 'Usuário não encontrado' });
+        if (!emailExiste) {
+            return res.status(404).json({ messagem: 'O email informado não consta em nosso banco de dados' });
         }
 
-        const senhaCorreta = await bcrypt.compare(senha_antiga, usuario.senha);
+        const senhaCorreta = await bcrypt.compare(senha_antiga, emailExiste.senha);
 
         if (!senhaCorreta) {
             return res.status(404).json({ messagem: "Senha Incorreta" });
         } else {
-            const hash = await bcrypt.hash(senha_nova, 10);
+            const criptografarSenha = await bcrypt.hash(senha_nova, 10);
 
-            const senhaAtualizada = await knex('usuarios').update({ senha: hash }).where('email', email);
+            const senhaAtualizada = await knex('usuarios').update({ senha: criptografarSenha }).where({ email });
 
             if (!senhaAtualizada) {
-                return res.status(404).json({ menssagem: 'A senha não foi redefinida' });
+                return res.status(404).json({ menssagem: 'A senha não foi atualizada' });
             }
 
             const enviarEmail = {
                 from: 'Loja Pedreiro de Software <nao-responder@lojapedreirodesoftware.com>',
                 to: email,
-                subject: 'Alteração de senha',
-                text: `Olá ${usuario.nome}. Sua senha foi atualizada com sucesso`
+                subject: 'Notificação - Atualização de senha',
+                text: `Olá ${emailExiste.nome}. Sua senha foi atualizada com sucesso`
             }
 
             nodemailer.sendMail(enviarEmail);
@@ -118,18 +118,22 @@ const editarPerfil = async (req, res) => {
     }
 
     try {
-        const emailExistente = await knex('usuarios').where({ email }).first();
+        const emailExiste = await knex('usuarios').where({ email }).first();
 
-        if (emailExistente.id != usuario.id && emailExistente) {
+        if (emailExiste.id != usuario.id && emailExiste) {
             return res.status(404).json({ messagem: 'O email informado já consta em nosso banco de dados' });
 
         } else {
 
-            const hash = await bcrypt.hash(senha, 10);
+            const criptografarSenha = await bcrypt.hash(senha, 10);
 
-            const usuarioAtualizado = await knex('usuarios').update({ nome, email, senha: hash }).where('email', usuario.email);
+            const usuarioAtualizado = await knex('usuarios').update({ nome, email, senha: criptografarSenha }).where('email', usuario.email);
 
-            return res.status(200).json({ menssagem: "Usuário Atualizado com Sucesso!" });
+            if (!usuarioAtualizado) {
+                return res.status(404).json({ messagem: 'O usuário não foi atualizado' });
+            }
+
+            return res.status(200).json({ menssagem: "Usuário atualizado com Sucesso!" });
         }
 
     } catch (error) {

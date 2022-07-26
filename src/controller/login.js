@@ -33,7 +33,7 @@ const login = async (req, res) => {
         const { senha: _, ...dadosUsuario } = usuario;
 
         return res.status(200).json({
-            usuario: dadosUsuario,
+            dadosUsuario,
             token
         });
     } catch (error) {
