@@ -82,6 +82,10 @@ const redefinirSenha = async (req, res) => {
 
             const senhaAtualizada = await knex('usuarios').update({ senha: hash }).where('email', email);
 
+            if (!senhaAtualizada) {
+                return res.status(404).json({ menssagem: 'A senha não foi redefinida' });
+            }
+
             const enviarEmail = {
                 from: 'Loja Pedreiro de Software <nao-responder@lojapedreirodesoftware.com>',
                 to: email,
