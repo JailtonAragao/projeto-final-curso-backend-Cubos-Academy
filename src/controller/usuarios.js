@@ -120,7 +120,7 @@ const editarPerfil = async (req, res) => {
     try {
         const emailExiste = await knex('usuarios').where({ email }).first();
 
-        if (emailExiste.id != usuario.id && emailExiste) {
+        if (emailExiste.id !== usuario.id && emailExiste) {
             return res.status(404).json({ messagem: 'O email informado já consta em nosso banco de dados' });
 
         } else {
