@@ -37,8 +37,7 @@ const cadastrarUsuarios = async (req, res) => {
             from: 'Loja Pedreiro de Software <nao-responder@lojapedreirodesoftware.com>',
             to: email,
             subject: 'Bem vindo a Loja Pedreiro de Software',
-            text: `Olá ${nome}. 
-            Voce realizou um cadastro na Loja Pedreiro de Software e pode fazer o login com o email: ${email}`
+            text: `Olá ${nome}. Você realizou um cadastro na Loja Pedreiro de Software e pode fazer o login com o email: ${email}`
         }
 
         nodemailer.sendMail(enviarEmail);
