@@ -51,6 +51,9 @@ const redefinirSenha = async (req, res) => {
     if (!senha_nova) {
         return res.status(404).json({ messagem: 'O campo senha_nova é obrigatório' });
     }
+    if (senha_antiga === senha_nova) {
+        return res.status(404).json({ messagem: 'A senha nova tem que ser diferente da senha antiga' });
+    }
 
     try {
         const usuario = await knex('usuarios').where({ email }).first();
