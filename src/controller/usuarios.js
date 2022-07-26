@@ -78,6 +78,42 @@ const redefinirSenha = async (req, res) => {
     }
 }
 
+const editarPerfil = async (req, res) => {
+    const { usuario } = req;
+
+    const { nome, email, senha } = req.body;
+
+    if (!nome) {
+        return res.status(404).json({ messagem: 'O campo nome é obrigatório' });
+    }
+    if (!email) {
+        return res.status(404).json({ messagem: 'O campo email é obrigatório' });
+    }
+    if (!senha) {
+        return res.status(404).json({ messagem: 'O campo senha é obrigatório' });
+    }
+
+    try {     
+        const emailExistente = await knex('usuarios').where({ email }).first();
+
+        if (emailExistente.id != usuario.id && emailExistente) {
+            return res.status(404).json({ messagem: 'O email informado já consta em nosso banco de dados' });
+            
+        } else {
+            
+            const hash = await bcrypt.hash(senha, 10);
+            
+            const usuarioAtualizado = await knex('usuarios').update({ nome, email, senha: hash }).where('email', usuario.email);
+            
+            return res.status(200).json({ menssagem: "Usuário Atualizado com Sucesso!" });
+        }
+    
+    } catch (error) {
+        return res.status(500).json({ menssagem: error.message }); 
+    }
+
+
+}
 const detalharPerfil = async (req, res) => {
     return res.status(200).json(req.usuario);
 }
@@ -85,5 +121,6 @@ const detalharPerfil = async (req, res) => {
 module.exports = {
     cadastrarUsuarios,
     redefinirSenha,
-    detalharPerfil
+    detalharPerfil,
+    editarPerfil
 }
