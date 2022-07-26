@@ -34,7 +34,7 @@ const cadastrarUsuarios = async (req, res) => {
         }
 
         const enviarEmail = {
-            from: 'Loja Pedreiro de Software <nao-responder@aprendendocomavida.com>',
+            from: 'Loja Pedreiro de Software <nao-responder@lojapedreirodesoftware.com>',
             to: email,
             subject: 'Bem vindo a Loja Pedreiro de Software',
             text: `Olá ${nome}. 
@@ -83,7 +83,7 @@ const redefinirSenha = async (req, res) => {
             const senhaAtualizada = await knex('usuarios').update({ senha: hash }).where('email', email);
 
             const enviarEmail = {
-                from: 'Loja Pedreiro de Software <nao-responder@aprendendocomavida.com>',
+                from: 'Loja Pedreiro de Software <nao-responder@lojapedreirodesoftware.com>',
                 to: email,
                 subject: 'Alteração de senha',
                 text: `Olá ${nome}. Sua senha foi atualizada com sucesso`
