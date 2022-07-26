@@ -1,5 +1,6 @@
 const knex = require('../config/conexao');
 const bcrypt = require('bcrypt');
+const nodemailer = require('../nodemailer');
 
 const cadastrarUsuarios = async (req, res) => {
     const { nome, email, senha } = req.body;
@@ -31,6 +32,16 @@ const cadastrarUsuarios = async (req, res) => {
         if (!cadastrarUsuario) {
             return res.status(404).json({ menssagem: 'Usuário não foi cadastrado' });
         }
+
+        const enviarEmail = {
+            from: 'Loja Pedreiro de Software <nao-responder@aprendendocomavida.com>',
+            to: email,
+            subject: 'Bem vindo a Loja Pedreiro de Software',
+            text: `Olá ${nome}. 
+            Voce realizou um cadastro na Loja Pedreiro de Software e pode fazer o login com o email: ${email}`
+        }
+
+        nodemailer.sendMail(enviarEmail);
 
         return res.status(201).json({ menssagem: 'Usuário cadastrado com sucesso' });
 
@@ -71,7 +82,14 @@ const redefinirSenha = async (req, res) => {
 
             const senhaAtualizada = await knex('usuarios').update({ senha: hash }).where('email', email);
 
-            // TO DO IMPLEMENTAR ENVIO DE EMAILS
+            const enviarEmail = {
+                from: 'Loja Pedreiro de Software <nao-responder@aprendendocomavida.com>',
+                to: email,
+                subject: 'Alteração de senha',
+                text: `Olá ${nome}. Sua senha foi atualizada com sucesso`
+            }
+
+            nodemailer.sendMail(enviarEmail);
 
             return res.status(204).send();
         }
@@ -96,27 +114,26 @@ const editarPerfil = async (req, res) => {
         return res.status(404).json({ messagem: 'O campo senha é obrigatório' });
     }
 
-    try {     
+    try {
         const emailExistente = await knex('usuarios').where({ email }).first();
 
         if (emailExistente.id != usuario.id && emailExistente) {
             return res.status(404).json({ messagem: 'O email informado já consta em nosso banco de dados' });
-            
+
         } else {
-            
+
             const hash = await bcrypt.hash(senha, 10);
-            
+
             const usuarioAtualizado = await knex('usuarios').update({ nome, email, senha: hash }).where('email', usuario.email);
-            
+
             return res.status(200).json({ menssagem: "Usuário Atualizado com Sucesso!" });
         }
-    
+
     } catch (error) {
-        return res.status(500).json({ menssagem: error.message }); 
+        return res.status(500).json({ menssagem: error.message });
     }
-
-
 }
+
 const detalharPerfil = async (req, res) => {
     return res.status(200).json(req.usuario);
 }
