@@ -1,8 +1,8 @@
 const knex = require('../config/conexao');
 const bcrypt = require('bcrypt');
 const nodemailer = require('../nodemailer');
-const schemaCadastrarUsuarios = require('../validations/schemaCadastrarUsuarios');
 const schemaRedefinirSenha = require('../validations/schemaRedefinirSenha');
+const schemaCadastrarUsuarios = require('../validations/schemaCadastrarUsuario');
 
 const cadastrarUsuarios = async (req, res) => {
     const { nome, email, senha } = req.body;
