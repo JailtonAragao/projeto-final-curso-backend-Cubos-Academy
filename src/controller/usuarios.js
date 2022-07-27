@@ -1,22 +1,15 @@
 const knex = require('../config/conexao');
 const bcrypt = require('bcrypt');
 const nodemailer = require('../nodemailer');
+const schemaCadastrarUsuarios = require('../validations/schemaCadastrarUsuarios');
+const schemaRedefinirSenha = require('../validations/schemaRedefinirSenha');
 
 const cadastrarUsuarios = async (req, res) => {
     const { nome, email, senha } = req.body;
 
-    if (!nome) {
-        return res.status(404).json({ messagem: 'O campo nome é obrigatório' });
-    }
-    if (!email) {
-        return res.status(404).json({ messagem: 'O campo email é obrigatório' });
-    }
-    if (!senha) {
-        return res.status(404).json({ messagem: 'O campo senha é obrigatório' });
-    }
-
     try {
-
+        await schemaCadastrarUsuarios.validate(req.body);
+        
         const emailExiste = await knex('usuarios').where({ email }).first();
 
         if (emailExiste) {
@@ -52,20 +45,13 @@ const cadastrarUsuarios = async (req, res) => {
 const redefinirSenha = async (req, res) => {
     const { email, senha_antiga, senha_nova } = req.body;
 
-    if (!email) {
-        return res.status(404).json({ messagem: 'O campo email é obrigatório' });
-    }
-    if (!senha_antiga) {
-        return res.status(404).json({ messagem: 'O campo senha_antiga é obrigatório' });
-    }
-    if (!senha_nova) {
-        return res.status(404).json({ messagem: 'O campo senha_nova é obrigatório' });
-    }
     if (senha_antiga === senha_nova) {
         return res.status(404).json({ messagem: 'A senha nova tem que ser diferente da senha antiga' });
     }
 
     try {
+        await schemaRedefinirSenha.validate(req.body);
+        
         const emailExiste = await knex('usuarios').where({ email }).first();
 
         if (!emailExiste) {
