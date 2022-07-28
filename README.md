@@ -219,7 +219,7 @@ Crie as seguintes tabelas e colunas abaixo:
     -   id
     -   nome
     -   email (campo único)
-    -   cpf 
+    -   cpf (campo único)
     -   cep 
     -   rua
     -   numero
