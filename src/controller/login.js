@@ -2,18 +2,14 @@ const knex = require('../config/conexao');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const fraseSecreta = require('../chave_secreta_jwt');
+const schemaLogin = require('../validations/schemaLogin');
 
 const login = async (req, res) => {
     const { email, senha } = req.body;
 
-    if (!email) {
-        return res.status(404).json({ messagem: 'Para efetuar o login é obrigatório informar o email' });
-    }
-    if (!senha) {
-        return res.status(404).json({ messagem: 'Para efetuar o login é obrigatório informar a senha' });
-    }
-
     try {
+        await schemaLogin.validate(req.body);
+        
         const login = await knex('usuarios').where({ email }).first();
 
         if (!login) {
