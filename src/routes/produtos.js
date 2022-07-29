@@ -2,7 +2,7 @@ const express = require('express');
 
 const validarToken = require('../middleware/validarToken');
 
-const { } = require('../controller/produtos');
+const { detalharProduto, excluirProduto } = require('../controller/produtos');
 
 const rotas = express();
 
