@@ -44,10 +44,10 @@ create table clientes (
 	nome varchar(100) not null,
 	email varchar(100) not null unique,
 	cpf varchar(11) not null unique,
-	cep int not null,
-	rua text not null,
-	numero int not null,
-	bairro text not null,
-	cidade text not null,
-	estado varchar(2) not null
+	cep int,
+	rua text,
+	numero int,
+	bairro text,
+	cidade text,
+	estado varchar(2)
 );
