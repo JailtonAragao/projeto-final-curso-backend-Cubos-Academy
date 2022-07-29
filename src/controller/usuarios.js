@@ -13,7 +13,7 @@ const cadastrarUsuarios = async (req, res) => {
         const emailExiste = await knex('usuarios').where({ email }).first();
 
         if (emailExiste) {
-            return res.status(404).json({ 'mensagem': 'O email informado já consta em nosso banco de dados' })
+            return res.status(404).json({ 'mensagem': 'O email informado já consta em nosso banco de dados' });
         }
 
         const criptografarSenha = await bcrypt.hash(senha, 10);
