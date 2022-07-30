@@ -9,8 +9,8 @@ const rotas = express();
 rotas.use(validarToken);
 
 rotas.post('/', cadastrarCliente);
-rotas.put('/', editarCliente);
-rotas.get('/', listarCliente);
-rotas.get('/:id', detalharCliente);
+// rotas.put('/', editarCliente);
+// rotas.get('/', listarCliente);
+// rotas.get('/:id', detalharCliente);
 
 module.exports = rotas;
