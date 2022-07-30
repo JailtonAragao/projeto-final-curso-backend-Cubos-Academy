@@ -1,4 +1,3 @@
-
 const knex = require('../config/conexao');
 
 const detalharProduto = async (req, res) => {
