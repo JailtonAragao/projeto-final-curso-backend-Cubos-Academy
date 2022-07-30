@@ -10,13 +10,13 @@ const cadastrarCliente = async (req, res) => {
         const emailExiste = await knex('usuarios').where({ email }).first();
 
         if (emailExiste) {
-            return res.status(404).json({ 'mensagem': 'O email informado já consta em nosso banco de dados' })
+            return res.status(404).json({ menssagem: 'O email informado já consta em nosso banco de dados' })
         }
 
         const cpfExiste = await knex('usuarios').where({ cpf }).first();
 
         if (cpfExiste) {
-            return res.status(404).json({ 'mensagem': 'O cpf informado já consta em nosso banco de dados' })
+            return res.status(404).json({ menssagem: 'O cpf informado já consta em nosso banco de dados' })
         }
 
         const inserirCliente = await knex('clientes')
@@ -24,13 +24,13 @@ const cadastrarCliente = async (req, res) => {
             .returning('*');
 
         if (!inserirCliente) {
-            return res.status(404).json({ 'mensagem': 'O cliente não foi cadastrado' });
+            return res.status(404).json({ menssagem: 'O cliente não foi cadastrado' });
         }
 
-        return res.status(201).json({ 'mensagem': 'Usuário cadastrado com sucesso' });
+        return res.status(201).json({ menssagem: 'Usuário cadastrado com sucesso' });
 
     } catch (error) {
-        return res.status(500).json({ 'mensagem': error.message });
+        return res.status(500).json({ menssagem: error.message });
     }
 }
 
