@@ -9,11 +9,11 @@ const cadastrarUsuarios = async (req, res) => {
 
     try {
         await schemaCadastrarUsuarios.validate(req.body);
-        
+
         const emailExiste = await knex('usuarios').where({ email }).first();
 
         if (emailExiste) {
-            return res.status(404).json({ 'mensagem': 'O email informado já consta em nosso banco de dados' })
+            return res.status(404).json({ menssagem: 'O email informado já consta em nosso banco de dados' })
         }
 
         const criptografarSenha = await bcrypt.hash(senha, 10);
@@ -23,7 +23,7 @@ const cadastrarUsuarios = async (req, res) => {
             .returning('*');
 
         if (!cadastrarUsuario) {
-            return res.status(404).json({ 'mensagem': 'Usuário não foi cadastrado' });
+            return res.status(404).json({ menssagem: 'Usuário não foi cadastrado' });
         }
 
         const enviarEmail = {
@@ -35,10 +35,10 @@ const cadastrarUsuarios = async (req, res) => {
 
         nodemailer.sendMail(enviarEmail);
 
-        return res.status(201).json({ 'mensagem': 'Usuário cadastrado com sucesso' });
+        return res.status(201).json({ menssagem: 'Usuário cadastrado com sucesso' });
 
     } catch (error) {
-        return res.status(500).json({ 'mensagem': error.message });
+        return res.status(500).json({ menssagem: error.message });
     }
 }
 
@@ -46,29 +46,29 @@ const redefinirSenha = async (req, res) => {
     const { email, senha_antiga, senha_nova } = req.body;
 
     if (senha_antiga === senha_nova) {
-        return res.status(404).json({ 'mensagem': 'A senha nova tem que ser diferente da senha antiga' });
+        return res.status(404).json({ menssagem: 'A senha nova tem que ser diferente da senha antiga' });
     }
 
     try {
         await schemaRedefinirSenha.validate(req.body);
-        
+
         const emailExiste = await knex('usuarios').where({ email }).first();
 
         if (!emailExiste) {
-            return res.status(404).json({ 'mensagem': 'O email informado não consta em nosso banco de dados' });
+            return res.status(404).json({ menssagem: 'O email informado não consta em nosso banco de dados' });
         }
 
         const senhaCorreta = await bcrypt.compare(senha_antiga, emailExiste.senha);
 
         if (!senhaCorreta) {
-            return res.status(404).json({ 'mensagem': "Senha Incorreta" });
+            return res.status(404).json({ menssagem: "Senha Incorreta" });
         } else {
             const criptografarSenha = await bcrypt.hash(senha_nova, 10);
 
             const senhaAtualizada = await knex('usuarios').update({ senha: criptografarSenha }).where({ email });
 
             if (!senhaAtualizada) {
-                return res.status(404).json({ 'mensagem': 'A senha não foi atualizada' });
+                return res.status(404).json({ menssagem: 'A senha não foi atualizada' });
             }
 
             const enviarEmail = {
@@ -84,7 +84,7 @@ const redefinirSenha = async (req, res) => {
         }
 
     } catch (error) {
-        return res.status(500).json({ 'mensagem': error.message });
+        return res.status(500).json({ menssagem: error.message });
     }
 }
 
@@ -93,21 +93,14 @@ const editarPerfil = async (req, res) => {
 
     const { nome, email, senha } = req.body;
 
-    if (!nome) {
-        return res.status(404).json({ 'mensagem': 'O campo nome é obrigatório' });
-    }
-    if (!email) {
-        return res.status(404).json({ 'mensagem': 'O campo email é obrigatório' });
-    }
-    if (!senha) {
-        return res.status(404).json({ 'mensagem': 'O campo senha é obrigatório' });
-    }
-
     try {
+
+        await schemaCadastrarUsuarios.validate(req.body);
+
         const emailExiste = await knex('usuarios').where({ email }).first();
 
         if (emailExiste.id !== usuario.id && emailExiste) {
-            return res.status(404).json({ 'mensagem': 'O email informado já consta em nosso banco de dados' });
+            return res.status(404).json({ menssagem: 'O email informado já consta em nosso banco de dados' });
 
         } else {
 
@@ -116,14 +109,14 @@ const editarPerfil = async (req, res) => {
             const usuarioAtualizado = await knex('usuarios').update({ nome, email, senha: criptografarSenha }).where('email', usuario.email);
 
             if (!usuarioAtualizado) {
-                return res.status(404).json({ 'mensagem': 'O usuário não foi atualizado' });
+                return res.status(404).json({ menssagem: 'O usuário não foi atualizado' });
             }
 
-            return res.status(200).json({ 'mensagem': "Usuário atualizado com Sucesso!" });
+            return res.status(200).json({ menssagem: "Usuário atualizado com Sucesso!" });
         }
 
     } catch (error) {
-        return res.status(500).json({ 'mensagem': error.message });
+        return res.status(500).json({ menssagem: error.message });
     }
 }
 
