@@ -7,28 +7,53 @@ const editarCliente = async (req, res) => {
     const { nome, email, cpf } = req.body;
 
     try {
-        await schemaEditarCliente.validate(req.body);
-        
         const clienteExiste = await knex('clientes').where({ id }).first();
-
-        const emailExiste = await knex('usuarios').where({ email }).first();
 
         if(!clienteExiste) {
             return res.status(404).json({ 'mensagem': 'Cliente não encontrado' });
         }
+        
+        await schemaEditarCliente.validate(req.body);
+        
+        const emailExiste = await knex('clientes').where({ email }).first();
+        
+        const cpfExiste = await knex('clientes').where({ cpf }).first();
 
-        if (emailExiste.id !== id) {
-            return res.status(404).json({ 'mensagem': 'O email informado já consta em nosso banco de dados' });
+        if (!cpfExiste || cpfExiste.id == id) {
+
+            if (!emailExiste || emailExiste.id == id) {
+            
+                const clienteAtualizado = await knex('clientes').update({ nome, email, cpf }).where({ id });
+    
+                if (!clienteAtualizado) {
+                    return res.status(404).json({ 'mensagem': 'O cliente não foi atualizado' });
+                }
+    
+                return res.status(200).json({ 'mensagem': "Cliente atualizado com Sucesso!" });
+                
+            } else {
+                 return res.status(404).json({ 'mensagem': 'O email informado já consta em nosso banco de dados' });
+                }
 
         } else {
-            const clienteAtualizado = await knex('clientes').update({ nome, email, cpf }).where('id', id);
-
-            if (!clienteAtualizado) {
-                return res.status(404).json({ 'mensagem': 'O cliente não foi atualizado' });
-            }
-
-            return res.status(200).json({ 'mensagem': "Cliente atualizado com Sucesso!" });
+            return res.status(404).json({ 'mensagem': 'O cpf informado já consta em nosso banco de dados' });
         }
+        
+        
+        
+        // if (!emailExiste || emailExiste.id == 1) {
+            
+        //     const clienteAtualizado = await knex('clientes').update({ nome, email, cpf }).where({ id });
+
+        //     if (!clienteAtualizado) {
+        //         return res.status(404).json({ 'mensagem': 'O cliente não foi atualizado' });
+        //     }
+
+        //     return res.status(200).json({ 'mensagem': "Cliente atualizado com Sucesso!" });
+            
+        // } else {
+        //     return res.status(404).json({ 'mensagem': 'O email informado já consta em nosso banco de dados' });
+        // }
 
     } catch (error) {
         return res.status(500).json({ 'mensagem': error.message });

@@ -8,10 +8,10 @@ const rotas = express();
 
 rotas.use(validarToken);
 
-rotas.post('/', cadastrarProduto);
-rotas.put('/', editarProduto);
-rotas.get('/', listarProduto);
-rotas.get('/:id', detalharProduto);
-rotas.delete('/:id', excluirProduto);
+rotas.post('/',);
+rotas.put('/',);
+rotas.get('/',);
+rotas.get('/:id',);
+rotas.delete('/:id',);
 
 module.exports = rotas;
