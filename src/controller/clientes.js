@@ -7,13 +7,13 @@ const cadastrarCliente = async (req, res) => {
     try {
         await schemaClientes.validate(req.body);
 
-        const emailExiste = await knex('usuarios').where({ email }).first();
+        const emailExiste = await knex('clientes').where({ email }).first();
 
         if (emailExiste) {
             return res.status(404).json({ menssagem: 'O email informado já consta em nosso banco de dados' })
         }
 
-        const cpfExiste = await knex('usuarios').where({ cpf }).first();
+        const cpfExiste = await knex('clientes').where({ cpf }).first();
 
         if (cpfExiste) {
             return res.status(404).json({ menssagem: 'O cpf informado já consta em nosso banco de dados' })
@@ -33,7 +33,6 @@ const cadastrarCliente = async (req, res) => {
         return res.status(500).json({ menssagem: error.message });
     }
 }
-
 
 module.exports = {
     cadastrarCliente
