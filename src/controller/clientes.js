@@ -1,6 +1,41 @@
 const knex = require('../config/conexao');
+
+const schemaClientes = require('../validations/schemaClientes');
 const schemaEditarCliente = require('../validations/schemaEditarCliente');
 
+const cadastrarCliente = async (req, res) => {
+    const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
+
+    try {
+        await schemaClientes.validate(req.body);
+
+        const emailExiste = await knex('clientes').where({ email }).first();
+
+        if (emailExiste) {
+            return res.status(404).json({ menssagem: 'O email informado já consta em nosso banco de dados' })
+        }
+
+        const cpfExiste = await knex('clientes').where({ cpf }).first();
+
+        if (cpfExiste) {
+            return res.status(404).json({ menssagem: 'O cpf informado já consta em nosso banco de dados' })
+        }
+
+        const inserirCliente = await knex('clientes')
+            .insert({ nome, email, cpf, cep, rua, numero, bairro, cidade, estado })
+            .returning('*');
+
+        if (!inserirCliente) {
+            return res.status(404).json({ menssagem: 'O cliente não foi cadastrado' });
+        }
+
+        return res.status(201).json({ menssagem: 'Cliente cadastrado com sucesso' });
+
+    } catch (error) {
+        return res.status(500).json({ menssagem: error.message });
+    }
+}
+        
 const editarCliente = async (req, res) => {
     const { id } = req.params;
 
@@ -10,7 +45,7 @@ const editarCliente = async (req, res) => {
         const clienteExiste = await knex('clientes').where({ id }).first();
 
         if(!clienteExiste) {
-            return res.status(404).json({ 'mensagem': 'Cliente não encontrado' });
+            return res.status(404).json({ menssagem: 'Cliente não encontrado' });
         }
         
         await schemaEditarCliente.validate(req.body);
@@ -26,23 +61,22 @@ const editarCliente = async (req, res) => {
                 const clienteAtualizado = await knex('clientes').update({ nome, email, cpf }).where({ id });
     
                 if (!clienteAtualizado) {
-                    return res.status(404).json({ 'mensagem': 'O cliente não foi atualizado' });
+                    return res.status(404).json({ menssagem: 'O cliente não foi atualizado' });
                 }
     
-                return res.status(200).json({ 'mensagem': "Cliente atualizado com Sucesso!" });
+                return res.status(200).json({ menssagem: "Cliente atualizado com Sucesso!" });
                 
             } else {
-                 return res.status(404).json({ 'mensagem': 'O email informado já consta em nosso banco de dados' });
+                 return res.status(404).json({ menssagem: 'O email informado já consta em nosso banco de dados' });
                 }
 
         } else {
-            return res.status(404).json({ 'mensagem': 'O cpf informado já consta em nosso banco de dados' });
+            return res.status(404).json({ menssagem: 'O cpf informado já consta em nosso banco de dados' });
         }
 
     } catch (error) {
-        return res.status(500).json({ 'mensagem': error.message });
+        return res.status(500).json({ menssagem: error.message });
     }
-
 }
 
 const listarClientes = async (req, res) => {
@@ -51,7 +85,7 @@ const listarClientes = async (req, res) => {
         return res.status(200).json(clientes);
 
     } catch (error) {
-        return res.status(500).json({ 'mensagem': error.message });
+        return res.status(500).json({ menssagem: error.message });
     }
 }
 
@@ -62,17 +96,18 @@ const detalharCliente = async (req, res) => {
         const clienteExiste = await knex('clientes').where({ id }).first();
 
         if(!clienteExiste) {
-            return res.status(404).json({ 'mensagem': 'Cliente não encontrado' });
+            return res.status(404).json({ menssagem: 'Cliente não encontrado' });
         }
 
         return res.status(200).json(clienteExiste);
 
     } catch (error) {
-        return res.status(500).json({ 'mensagem': error.message });
+        return res.status(500).json({ menssagem: error.message });
     }
 }
 
 module.exports = {
+    cadastrarCliente,
     editarCliente,
     listarClientes,
     detalharCliente
