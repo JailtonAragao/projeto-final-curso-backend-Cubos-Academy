@@ -9,11 +9,11 @@ const login = async (req, res) => {
 
     try {
         await schemaLogin.validate(req.body);
-        
+
         const login = await knex('usuarios').where({ email }).first();
 
         if (!login) {
-            return res.status(404).json({ messagem: "Email e senha não confere" });
+            return res.status(404).json({ mensagem: "Email e senha não confere" });
         }
 
         const usuario = login;
@@ -21,7 +21,7 @@ const login = async (req, res) => {
         const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
 
         if (!senhaCorreta) {
-            return res.status(404).json({ messagem: "Email e senha não confere" });
+            return res.status(404).json({ mensagem: "Email e senha não confere" });
         }
 
         const token = jwt.sign({ id: usuario.id }, fraseSecreta, { expiresIn: '8h' });

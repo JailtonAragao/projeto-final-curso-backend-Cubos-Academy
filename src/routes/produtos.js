@@ -10,7 +10,7 @@ rotas.use(validarToken);
 
 rotas.post('/', cadastrarProduto);
 rotas.put('/:id', editarProduto);
-rotas.get('/:categoria_id', listarProduto);
+rotas.get('/', listarProduto);
 rotas.get('/:id', detalharProduto);
 rotas.delete('/:id', excluirProduto);
 
