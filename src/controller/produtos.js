@@ -13,30 +13,28 @@ const cadastrarProduto = async (req, res) => {
         const descricaoExiste = await knex('produtos').where({ descricao }).first();
 
         if (descricaoExiste) {
-            return res.status(404).json({ menssagem: 'O produto produto já cadastrado.' })
+            return res.status(404).json({ mensagem: 'Já existe produto cadastrado com essa descrição.' })
         }
 
-        const categoriaExiste = await knex('produtos').where({ categoria_id }).first();
+        const categoriaExiste = await knex('categorias').where({ id: categoria_id }).first();
 
         if (!categoriaExiste) {
-            return res.status(404).json({ menssagem: 'Categoria cadastrada não existe.' })
+            return res.status(404).json({ mensagem: 'A categoria informada não existe em nosso banco de dados.' })
         }
 
-        
         const cadastrarProduto = await knex('produtos')
             .insert({ descricao, quantidade_estoque, valor, categoria_id })
             .returning('*');
 
-            if (!cadastrarProduto) {
-                return res.status(404).json({ menssagem: 'Produto não foi cadastrado' });
-            }    
+        if (!cadastrarProduto) {
+            return res.status(404).json({ mensagem: 'Produto não foi cadastrado' });
+        }
 
-            return res.status(201).json({ menssagem: 'Produto cadastrado com sucesso' });
-        
+        return res.status(201).json({ mensagem: 'Produto cadastrado com sucesso' });
+
     } catch (error) {
-        return res.status(500).json({ menssagem: error.message });  
+        return res.status(500).json({ mensagem: error.message });
     }
-
 }
 
 const editarProduto = async (req, res) => {
@@ -48,51 +46,52 @@ const editarProduto = async (req, res) => {
 
         await schemaEditarProduto.validate(req.body);
 
-        const descricaoExiste = await knex('produtos').where({ descricao }).first();
+        const produtoExiste = await knex('produtos').where({ id }).first();
 
-        if (descricaoExiste) {
-            return res.status(404).json({ menssagem: 'O produto produto já cadastrado.' })
+        if (!produtoExiste) {
+            return res.status(404).json({ mensagem: 'Produto não encontrado.' })
         }
 
-        const categoriaExiste = await knex('produtos').where({ categoria_id }).first();
+        const categoriaExiste = await knex('categorias').where({ id: categoria_id }).first();
 
         if (!categoriaExiste) {
-            return res.status(404).json({ menssagem: 'Categoria cadastrada não existe.' })
+            return res.status(404).json({ mensagem: 'A categoria informada não existe em nosso banco de dados.' })
         }
 
-        
         const editarProduto = await knex('produtos')
             .update({ descricao, quantidade_estoque, valor, categoria_id })
-            .where({id});
-            
+            .where({ id });
 
-            if (!editarProduto) {
-                return res.status(404).json({ menssagem: 'Produto não foi atualizado' });
-            }    
+        if (!editarProduto) {
+            return res.status(404).json({ mensagem: 'Produto não foi atualizado' });
+        }
 
-            return res.status(201).json({ menssagem: 'Produto atualizado com sucesso' });
-        
+        return res.status(201).json({ mensagem: 'Produto atualizado com sucesso' });
+
     } catch (error) {
-        return res.status(500).json({ menssagem: error.message });  
+        return res.status(500).json({ mensagem: error.message });
     }
 }
 
 const listarProduto = async (req, res) => {
-    const {categoria_id} = req.params;
 
-    const categoriaExiste = await knex('produtos').where({ categoria_id }).first();
-
-        if (!categoriaExiste) {
-            return res.status(404).json({ menssagem: 'Categoria solicitada não existe.' })
-        }
-
+    const { categoria_id } = req.query
 
     try {
-        const produtos = await knex('produtos').where({ categoria_id });
-        return res.status(200).json(produtos);
 
+        if (!categoria_id) {
+            const listarTodos = await knex('produtos');
+            return res.status(200).json(listarTodos);
+        } else {
+            const produtoExiste = await knex('produtos').where({ categoria_id }).first();
+
+            if (!produtoExiste) {
+                return res.status(404).json({ mensagem: "Produto não encontrado" });
+            }
+            return res.status(200).json(produtoExiste);
+        }
     } catch (error) {
-        return res.status(500).json({ menssagem: error.message });
+        return res.status(500).json({ mensagem: error.message });
     }
 }
 
@@ -103,13 +102,13 @@ const detalharProduto = async (req, res) => {
         const produtoExiste = await knex('produtos').where({ id }).first();
 
         if (!produtoExiste) {
-            return res.status(404).json({ menssagem: "O produto não existe em nosso banco de dados." });
+            return res.status(404).json({ mensagem: "O produto não existe em nosso banco de dados." });
         }
 
         return res.status(200).json(produtoExiste);
 
     } catch (error) {
-        return res.status(500).json({ menssagem: error.message });
+        return res.status(500).json({ mensagem: error.message });
     }
 }
 
@@ -120,19 +119,19 @@ const excluirProduto = async (req, res) => {
         const produtoExiste = await knex('produtos').where({ id }).first();
 
         if (!produtoExiste) {
-            return res.status(404).json({ menssagem: "O produto não existe em nosso banco de dados." });
+            return res.status(404).json({ mensagem: "O produto não existe em nosso banco de dados." });
         }
 
         const deletarProduto = await knex('produtos').where({ id }).del();
 
         if (!deletarProduto) {
-            return res.status(404).json({ menssagem: "O produto não foi excluido" });
+            return res.status(404).json({ mensagem: "O produto não foi excluido" });
         }
 
-        return res.status(200).json({ menssagem: "Produto excluido com sucesso" });
+        return res.status(200).json({ mensagem: "Produto excluido com sucesso" });
 
     } catch (error) {
-        return res.status(500).json({ menssagem: error.message });
+        return res.status(500).json({ mensagem: error.message });
     }
 }
 
