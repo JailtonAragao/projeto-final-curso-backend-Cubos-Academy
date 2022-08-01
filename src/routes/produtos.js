@@ -2,15 +2,15 @@ const express = require('express');
 
 const validarToken = require('../middleware/validarToken');
 
-const { detalharProduto, excluirProduto } = require('../controller/produtos');
+const { detalharProduto, excluirProduto, cadastrarProduto, listarProduto, editarProduto } = require('../controller/produtos');
 
 const rotas = express();
 
 rotas.use(validarToken);
 
-// rotas.post('/', cadastrarProduto);
-// rotas.put('/', editarProduto);
-// rotas.get('/', listarProduto);
+rotas.post('/', cadastrarProduto);
+rotas.put('/:id', editarProduto);
+rotas.get('/:categoria_id', listarProduto);
 rotas.get('/:id', detalharProduto);
 rotas.delete('/:id', excluirProduto);
 
