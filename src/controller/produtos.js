@@ -83,7 +83,7 @@ const listarProduto = async (req, res) => {
             const listarTodos = await knex('produtos');
             return res.status(200).json(listarTodos);
 
-        } else if (categoria_id && Array.isArray(categoria_id)) {
+        } else if (Array.isArray(categoria_id)) {
             const categoriaExiste = await knex('categorias').whereIn('id', categoria_id);
             if (!categoriaExiste) {
                 return res.status(404).json({ mensagem: 'A categoria pesquisada não existe em nosso banco de dados.' });
