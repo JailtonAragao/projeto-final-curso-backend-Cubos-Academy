@@ -85,7 +85,7 @@ const listarProduto = async (req, res) => {
             const listarTodos = await knex('produtos');
             return res.status(200).json(listarTodos);
         } else if (Array.isArray(categoria_id)) {
-            const arrayProdutoExiste = await knex('produtos').whereRaw('categoria_id = ?', categoria_id);
+            const arrayProdutoExiste = await knex('produtos').where('categoria_id', 'any', categoria_id);
             return res.status(200).json(arrayProdutoExiste);
         } else {
             const produtoExiste = await knex('produtos').where({ categoria_id }).first();
