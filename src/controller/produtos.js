@@ -82,16 +82,16 @@ const listarProduto = async (req, res) => {
         if (!categoria_id) {
             const listarTodos = await knex('produtos');
             return res.status(200).json(listarTodos);
-        } else if (Array.isArray(categoria_id)) {
-            const filtroProdutoExiste = await knex('produtos').whereIn('categoria_id', categoria_id);
-            return res.status(200).json(filtroProdutoExiste);
+            // } else if (Array.isArray(categoria_id)) {
+            //     const filtroProdutoExiste = await knex('produtos').whereIn('categoria_id', categoria_id);
+            //     return res.status(200).json(filtroProdutoExiste);
         } else {
-            const produtoExiste = await knex('produtos').where({ categoria_id }).first();
+            const filtroProduto = await knex('produtos').whereIn('categoria_id', categoria_id);
 
-            if (!produtoExiste) {
+            if (!filtroProduto) {
                 return res.status(404).json({ mensagem: "Produto não encontrado" })
             }
-            return res.status(200).json(produtoExiste);
+            return res.status(200).json(filtroProduto);
         }
     } catch (error) {
         return res.status(500).json({ mensagem: error.message });
