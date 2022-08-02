@@ -85,7 +85,7 @@ const listarProduto = async (req, res) => {
             const listarTodos = await knex('produtos');
             return res.status(200).json(listarTodos);
         } else if (Array.isArray(categoria_id)) {
-            const arrayProdutoExiste = await knex('produtos').whereNotIn({ categoria_id })
+            const arrayProdutoExiste = await knex('produtos').whereAny({ categoria_id })
             console.log(arrayProdutoExiste)
             return res.status(200).json(arrayProdutoExiste);
         } else {
