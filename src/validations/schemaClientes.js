@@ -1,6 +1,6 @@
 const yup = require('./configuracoes');
 
-const schemaClientes = yup.object().shape({
+const schemaCadastrarClientes = yup.object().shape({
     nome: yup.string().required('O campo nome é obrigatório'),
     email: yup.string().email().required('O campo email é obrigatório'),
     cpf: yup.string().required('O campo cpf é obrigatório').min(11).max(11),
@@ -12,4 +12,13 @@ const schemaClientes = yup.object().shape({
     estado: yup.string().max(2)
 });
 
-module.exports = schemaClientes;
+const schemaEditarClientes = yup.object().shape({
+    nome: yup.string().required('O campo nome é obrigatório'),
+    email: yup.string().email().required('O campo email é obrigatório'),
+    cpf: yup.string().required('O campo cpf é obrigatório').max(11)
+});
+
+module.exports = {
+    schemaCadastrarClientes,
+    schemaEditarClientes
+};

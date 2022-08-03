@@ -1,14 +1,14 @@
 const knex = require('../config/conexao');
 const bcrypt = require('bcrypt');
 const nodemailer = require('../nodemailer');
-const schemaRedefinirSenha = require('../validations/schemaRedefinirSenha');
-const schemaCadastrarUsuarios = require('../validations/schemaCadastrarUsuario');
+
+const { schemaCadastrarEditarUsuarios, schemaRedefinirSenha } = require('../validations/schemaUsuarios');
 
 const cadastrarUsuarios = async (req, res) => {
     const { nome, email, senha } = req.body;
 
     try {
-        await schemaCadastrarUsuarios.validate(req.body);
+        await schemaCadastrarEditarUsuarios.validate(req.body);
 
         const emailExiste = await knex('usuarios').where({ email }).first();
 
@@ -95,7 +95,7 @@ const editarPerfil = async (req, res) => {
 
     try {
 
-        await schemaCadastrarUsuarios.validate(req.body);
+        await schemaCadastrarEditarUsuarios.validate(req.body);
 
         const emailExiste = await knex('usuarios').where({ email }).first();
 

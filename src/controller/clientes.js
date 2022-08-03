@@ -1,13 +1,12 @@
 const knex = require('../config/conexao');
 
-const schemaClientes = require('../validations/schemaClientes');
-const schemaEditarCliente = require('../validations/schemaEditarCliente');
+const { schemaCadastrarClientes, schemaEditarClientes } = require('../validations/schemaClientes');
 
 const cadastrarCliente = async (req, res) => {
     const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
 
     try {
-        await schemaClientes.validate(req.body);
+        await schemaCadastrarClientes.validate(req.body);
 
         const emailExiste = await knex('clientes').where({ email }).first();
 
@@ -48,7 +47,7 @@ const editarCliente = async (req, res) => {
             return res.status(404).json({ mensagem: 'Cliente não encontrado' });
         }
 
-        await schemaEditarCliente.validate(req.body);
+        await schemaEditarClientes.validate(req.body);
 
         const emailExiste = await knex('clientes').where({ email }).first();
 
