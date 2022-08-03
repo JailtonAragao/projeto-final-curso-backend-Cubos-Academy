@@ -1,6 +1,6 @@
 const knex = require('../config/conexao');
 
-const { schemaCadastrarProduto, schemaEditarProduto } = require('../validations/schemaProdutos');
+const { schemaCadastrarProdutos, schemaEditarProdutos } = require('../validations/schemaProdutos')
 
 const cadastrarProduto = async (req, res) => {
     const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
