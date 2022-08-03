@@ -7,7 +7,7 @@ const cadastrarProduto = async (req, res) => {
 
     try {
 
-        await schemaCadastrarProduto.validate(req.body);
+        await schemaCadastrarProdutos.validate(req.body);
 
         const descricaoExiste = await knex('produtos').where({ descricao }).first();
 
@@ -43,7 +43,7 @@ const editarProduto = async (req, res) => {
 
     try {
 
-        await schemaEditarProduto.validate(req.body);
+        await schemaEditarProdutos.validate(req.body);
 
         const produtoExiste = await knex('produtos').where({ id }).first();
 
