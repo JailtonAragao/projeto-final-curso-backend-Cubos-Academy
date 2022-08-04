@@ -460,8 +460,6 @@ Critérios de aceite:
 
 Essa é a rota que será chamada quando o usuário logado quiser listar todos os pedidos cadastrados.
 
-**Atenção:**: Lembre-se sempre que cada usuário só pode visualizar e manipular seus próprios dados e visualizar seus próprios pedidos. Não atender a este pré-requisito é uma falha de segurança gravíssima!
-
 Deveremos incluir um parâmetro do tipo query **cliente_id** para que seja possível consultar pedidos por clientes, de modo, que serão filtrados de acordo com o id de um cliente.
 
 ```javascript
@@ -523,7 +521,7 @@ Essa é a rota que será utilizada para fazer o upload de uma imagem no servidor
 
 Critérios de aceite:
 
-    - Validar se a propriedade foi informada no corpo da requisição.
+    - Validar se a propriedade `url_produto`, foi informada no corpo da requisição.
     - Enviar a imagem para o servidor de armazenamento e obter a URL da imagem que teve upload concluído.
 
 </details>
