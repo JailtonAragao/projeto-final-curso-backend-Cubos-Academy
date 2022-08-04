@@ -572,5 +572,6 @@ Critérios de aceite:
 -   [Validações e boas práticas](https://aulas.cubos.academy/turma/8e525417-a33a-46f6-9476-9fcdfe375f99/aulas/34864c9a-5db4-42d5-9fb7-f8103b8bfd0b)
 -   [Deploy](https://aulas.cubos.academy/turma/8e525417-a33a-46f6-9476-9fcdfe375f99/aulas/36da6c7a-cd72-4519-8d18-54b9e873be1f)
 -   [Revisão de deploy](https://aulas.cubos.academy/turma/8e525417-a33a-46f6-9476-9fcdfe375f99/aulas/5d3ea2e5-e8da-4714-a4a2-5492ba69d096)
+-   [Upload de arquivos])(https://aulas.cubos.academy/turma/8e525417-a33a-46f6-9476-9fcdfe375f99/aulas/7a75ac10-2387-49bd-9baa-25e1676704fa)
 
 ###### tags: `back-end` `módulo 5` `nodeJS` `PostgreSQL` `API REST` `desafio`
