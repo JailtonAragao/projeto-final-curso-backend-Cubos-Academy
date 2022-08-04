@@ -530,7 +530,7 @@ Critérios de aceite:
 <summary><b>Aprimorar cadastro de produto</b></summary>
 <br>
 
-Deverá ser aprimorado o cadastro de produto para permitir vincular uma imagem a um produto existente. 
+Deverá ser aprimorado o cadastro de produto para permitir vincular uma imagem a um produto. 
 Deverá ser criada uma coluna `produto_imagem` para que seja possível efetuar o vínculo entre a imagem e o produto.
 
 Critérios de aceite:
