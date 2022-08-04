@@ -53,7 +53,6 @@ Abaixo, listamos os possíveis **_status codes_** esperados como resposta da API
 // 404 (Not Found) = o servidor não pode encontrar o recurso solicitado
 // 500 (Internal Server Error) = erro inesperado do servidor
 ```
----
 
 <details>
 <summary>1ª Sprint</summary>
@@ -146,6 +145,7 @@ Critérios de aceite:
         - email
         - senha_antiga
         - senha_nova
+    - A senha antiga não pode ser igual a senha nova.
     - Validar se o e-mail e a senha antiga estão corretos para o usuário em questão.
     - Alterar a senha no banco de dados para a nova senha informada.
     - Como forma de segurança, enviar e-mail alertando o usuário que a senha foi alterada.
@@ -219,7 +219,7 @@ Crie as seguintes tabelas e colunas abaixo:
     -   id
     -   nome
     -   email (campo único)
-    -   cpf (campo único)
+    -   cpf (campo único) 
     -   cep 
     -   rua
     -   numero
@@ -377,6 +377,196 @@ Critérios de aceite:
 
 ---
 
+<details>
+<summary>3ª Sprint</summary>
+<br>
+
+<details>
+<summary><b>Banco de Dados</b></summary>
+<br>
+
+Crie as seguintes tabelas e colunas abaixo: 
+
+**ATENÇÃO! Os nomes das tabelas e das colunas a serem criados devem seguir exatamente os nomes listados abaixo.**
+
+-   pedidos
+    -   id
+    -   cliente_id
+    -   observacao
+    -   valor_total
+-   pedido_produtos
+    -   id
+    -   pedido_id
+    -   produto_id
+    -   quantidade_produto
+    -   valor_produto
+
+</details>
+
+---
+
+## **ATENÇÃO**: Todas as funcionalidades (endpoints) a seguir, a partir desse ponto, deverão exigir o token de autenticação do usuário logado, recebendo no header com o formato Bearer Token. Portanto, em cada funcionalidade será necessário validar o token informado.
+
+---
+
+<details>
+<summary><b>Cadastrar Pedido</b></summary>
+
+#### `POST` `/pedido`
+
+Essa é a rota que será utilizada para cadastrar um novo pedido no sistema.
+
+**Lembre-se:** Cada pedido deverá conter ao menos um produto vinculado.
+
+**Atenção:** As propriedades produto_id e quantidade_produto devem ser informadas dentro de um array e para cada produto deverá ser criado um objeto neste array, como ilustrado no objeto de requisição abaixo.
+Só deverá ser cadastrado o pedido caso todos produtos vinculados ao pedido realmente existão no banco de dados.
+
+```javascript
+// Corpo da requisição para cadastro de pedido (body)
+{
+    "cliente_id": 1,
+    "observacao": "Em caso de ausência recomendo deixar com algum vizinho",
+    "pedido_produtos": [
+        {
+            "produto_id": 1,
+            "quantidade_produto": 10
+        },
+        {
+            "produto_id": 2,
+            "quantidade_produto": 20
+        }
+    ]
+}
+```
+
+Critérios de aceite:
+
+    -   Validar os campos obrigatórios:
+        -   cliente_id
+        -   pedido_produtos
+            -   produto_id
+            -   quantidade_produto
+    -   Validar se existe cliente para o id enviado no corpo (body) da requisição.
+    -   Validar se existe produto para cada produto_id informado dentro do array enviado no corpo (body) da requisição.
+    -   Validar se existe a quantidade em estoque de cada produto existente dentro do array, de acordo com a quantidade informada no corpo (body) da requisição.
+    -   O pedido deverá ser cadastrado, apenas, se todos os produtos estiverem validados.    
+
+</details>
+
+<details>
+<summary><b>Listar Pedidos</b></summary>
+
+#### `GET` `/pedido`
+
+Essa é a rota que será chamada quando o usuário logado quiser listar todos os pedidos cadastrados.
+
+**Atenção:**: Lembre-se sempre que cada usuário só pode visualizar e manipular seus próprios dados e visualizar seus próprios pedidos. Não atender a este pré-requisito é uma falha de segurança gravíssima!
+
+Deveremos incluir um parâmetro do tipo query **cliente_id** para que seja possível consultar pedidos por clientes, de modo, que serão filtrados de acordo com o id de um cliente.
+
+```javascript
+// Resposta para listagem de pedido (body)
+[
+    {
+        "pedido": {
+            "id": 1,
+            "valor_total": 230010,
+            "observacao": null,
+            "cliente_id": 1
+        },
+        "pedido_produtos": [
+            {
+                "id": 1,
+                "quantidade_produto": 1,
+                "valor_produto": 10,
+                "pedido_id": 1,
+                "produto_id": 1
+            },
+            {
+                "id": 2,
+                "quantidade_produto": 2,
+                "valor_produto": 200000,
+                "pedido_id": 1,
+                "produto_id": 2
+            }
+        ]
+    }
+]
+```
+
+Critérios de aceite:
+
+    - Caso seja enviado o parâmetro do tipo query **cliente_id**, filtrar os pedidos de acordo com o cliente, caso o id do cliente informado exista.
+    - Caso não seja informado o parâmetro do tipo query **cliente_id** todos os pedidos cadastrados deverão ser retornados.
+
+</details>
+
+<details>
+<summary><b>Aplicar validação na exclusão de produto</b></summary>
+<br>
+
+Deverá ser aplicada uma regra de negócio que não permitirá exclusão de produto que tenha sido registrado em algum pedido.
+
+Critérios de aceite:
+
+    - Validar se o produto que está sendo excluído não está vinculado a nenhum pedido, caso estiver, não poderá ser excluído e deverá ser retornada uma mensagem indicando o motivo.
+
+</details>
+
+<details>
+<summary><b>Upload de imagem do produto</b></summary>
+<br>
+
+#### `POST` `/upload`
+
+Essa é a rota que será utilizada para fazer o upload de uma imagem no servidor de armazenamento.
+
+Critérios de aceite:
+
+    - Validar se a propriedade foi informada no corpo da requisição.
+    - Enviar a imagem para o servidor de armazenamento e obter a URL da imagem que teve upload concluído.
+
+</details>
+
+<details>
+<summary><b>Aprimorar cadastro de produto</b></summary>
+<br>
+
+Deverá ser aprimorado o cadastro de produto para permitir vincular uma imagem a um produto existente. 
+Deverá ser criada uma coluna `produto_imagem` para que seja possível efetuar o vínculo entre a imagem e o produto.
+
+Critérios de aceite:
+
+    - O campo produto_imagem deve ser opcional.
+
+</details>
+
+<details>
+<summary><b>Aprimorar atualização de produto</b></summary>
+<br>
+
+Deverá ser aprimorada a atualização de produto para permitir vincular uma imagem a um produto existente. 
+
+Critérios de aceite:
+
+    - Caso exista uma imagem vinculada a esse produto, a imagem vinculada anteriormente deverá ser excluída no servidor de armazenamento e substituída pela nova imagem.
+    - Caso exista uma imagem vinculada a esse produto, e o campo `produto_imagem` de atualização possuir valor `null`deverá ser excluída a imagem vinculada anteriormente e o valor `null` será atribuído a coluna `produto_imagem` deixando o produto sem imagem vinculada.
+</details>
+
+<details>
+<summary><b>Aprimorar exclusão de produto</b></summary>
+<br>
+
+Deverá ser aprimorada a exclusão de produto para que quando o produto for excluído também seja removida a imagem vinculada a ele na servidor de armazenamento.
+
+Critérios de aceite:
+
+    - Na exclusão do produto a imagem vinculada a este produto deverá ser excluída do servidor de armazenamento.
+    
+</details>
+
+</details>
+
 ## Aulas úteis:
 
 -   [Git e fluxo de trabalho em equipe](https://aulas.cubos.academy/turma/8e525417-a33a-46f6-9476-9fcdfe375f99/aulas/67078ad8-6e11-4d57-a7c1-c1c465cb919e)
@@ -385,4 +575,4 @@ Critérios de aceite:
 -   [Deploy](https://aulas.cubos.academy/turma/8e525417-a33a-46f6-9476-9fcdfe375f99/aulas/36da6c7a-cd72-4519-8d18-54b9e873be1f)
 -   [Revisão de deploy](https://aulas.cubos.academy/turma/8e525417-a33a-46f6-9476-9fcdfe375f99/aulas/5d3ea2e5-e8da-4714-a4a2-5492ba69d096)
 
-###### tags: `back-end` `módulo 5` `nodeJS` `PostgreSQL` `API REST`
+###### tags: `back-end` `módulo 5` `nodeJS` `PostgreSQL` `API REST` `desafio`
