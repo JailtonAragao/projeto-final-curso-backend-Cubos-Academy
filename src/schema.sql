@@ -51,3 +51,24 @@ create table clientes (
 	cidade text,
 	estado varchar(2)
 );
+
+create table pedidos (
+	id serial primary key,
+	cliente_id int not null,
+	observacao text,
+	valor_total int,
+	foreign key (cliente_id) references clientes(id)
+);
+
+create table pedido_produtos (
+	id serial primary key,
+ 	pedido_id int not null,
+ 	produto_id int not null,
+	quantidade_produto int not null,
+	valor_produto int,
+	foreign key (pedido_id) references pedidos(id),
+	foreign key (produto_id) references produtos(id)
+);
+
+alter table produtos
+add produto_imagem text default null;
