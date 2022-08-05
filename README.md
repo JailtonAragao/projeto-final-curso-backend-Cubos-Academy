@@ -460,8 +460,6 @@ Critérios de aceite:
 
 Essa é a rota que será chamada quando o usuário logado quiser listar todos os pedidos cadastrados.
 
-**Atenção:**: Lembre-se sempre que cada usuário só pode visualizar e manipular seus próprios dados e visualizar seus próprios pedidos. Não atender a este pré-requisito é uma falha de segurança gravíssima!
-
 Deveremos incluir um parâmetro do tipo query **cliente_id** para que seja possível consultar pedidos por clientes, de modo, que serão filtrados de acordo com o id de um cliente.
 
 ```javascript
@@ -523,7 +521,7 @@ Essa é a rota que será utilizada para fazer o upload de uma imagem no servidor
 
 Critérios de aceite:
 
-    - Validar se a propriedade foi informada no corpo da requisição.
+    - Validar se a propriedade `url_produto`, foi informada no corpo da requisição.
     - Enviar a imagem para o servidor de armazenamento e obter a URL da imagem que teve upload concluído.
 
 </details>
@@ -532,7 +530,7 @@ Critérios de aceite:
 <summary><b>Aprimorar cadastro de produto</b></summary>
 <br>
 
-Deverá ser aprimorado o cadastro de produto para permitir vincular uma imagem a um produto existente. 
+Deverá ser aprimorado o cadastro de produto para permitir vincular uma imagem a um produto. 
 Deverá ser criada uma coluna `produto_imagem` para que seja possível efetuar o vínculo entre a imagem e o produto.
 
 Critérios de aceite:
@@ -574,5 +572,6 @@ Critérios de aceite:
 -   [Validações e boas práticas](https://aulas.cubos.academy/turma/8e525417-a33a-46f6-9476-9fcdfe375f99/aulas/34864c9a-5db4-42d5-9fb7-f8103b8bfd0b)
 -   [Deploy](https://aulas.cubos.academy/turma/8e525417-a33a-46f6-9476-9fcdfe375f99/aulas/36da6c7a-cd72-4519-8d18-54b9e873be1f)
 -   [Revisão de deploy](https://aulas.cubos.academy/turma/8e525417-a33a-46f6-9476-9fcdfe375f99/aulas/5d3ea2e5-e8da-4714-a4a2-5492ba69d096)
+-   [Upload de arquivos](https://aulas.cubos.academy/turma/8e525417-a33a-46f6-9476-9fcdfe375f99/aulas/7a75ac10-2387-49bd-9baa-25e1676704fa)
 
 ###### tags: `back-end` `módulo 5` `nodeJS` `PostgreSQL` `API REST` `desafio`
