@@ -5,4 +5,6 @@ const schemaUpload = yup.object().shape({
     imagem: yup.string().requered('O campo imagem é obrigatório')
 });
 
-module.exports = schemaUpload;
+module.exports = {
+    schemaUpload
+};
