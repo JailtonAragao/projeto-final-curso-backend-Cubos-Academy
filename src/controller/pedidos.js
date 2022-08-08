@@ -33,18 +33,49 @@ const cadastrarPedido = async (req, res) => {
             if (!findById) {
                 produtosNaoEncontrados.push(itemPedido);
             } else {
-                produtosEncontrados.push(findById);
+                produtosEncontrados.push(itemPedido);
             }       
         }
 
-        // BLOCO PARA COMEÇAR INSERT
+        console.log(produtosEncontrados)
         
         if (produtosNaoEncontrados.length == 0) {
-            
-            const cadastrarPedido = await knex('pedidos')
-            .insert({ cliente_id, observacao }).returning('*');
+
+            for (const itemPedido of produtosEncontrados) {
+                const findById = produtoExiste.find((produto) => {
+                    return produto.id == itemPedido.produto_id && produto.quantidade_estoque >= itemPedido.quantidade_produto
+                });    
+                
+                if (!findById) {
+                    return res.status(404).json({ mensagem: "Não temos estoque desse produto"});
+                } else {
+                    let retirarEstoque = findById.quantidade_estoque - itemPedido.quantidade_produto;
+                    
+                    await knex('produtos')
+                    .update({ quantidade_estoque: retirarEstoque })
+                    .where({ id: itemPedido.produto_id })
+
+                    const cadastrarPedido = await knex('pedidos')
+                    .insert({ cliente_id, observacao })
+                    .returning('*');
+
+                    const encontrarPedido = await knex('pedidos')
+                    .where({ id: cliente_id }).first(); 
+                    
+                    await knex('pedido_produtos')
+                    .insert({
+                        pedido_id: encontrarPedido.id, 
+                        produto_id: itemPedido.produto_id, 
+                        quantidade_produto: itemPedido.quantidade_produto, 
+                        valor_produto: findById.valor
+                    });
+
+                }
+
+            }
             
             return res.status(200).json({ mensagem: "Pedido cadastrado"});
+        
         } else {
             return res.status(404).json({
                 "mensagem": "Os Produtos a seguir não foram encontrados",
