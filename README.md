@@ -483,7 +483,7 @@ Deveremos incluir um par√¢metro do tipo query **cliente_id** para que seja poss√
             {
                 "id": 2,
                 "quantidade_produto": 2,
-                "valor_produto": 200000,
+                "valor_produto": 230000,
                 "pedido_id": 1,
                 "produto_id": 2
             }
