@@ -15,7 +15,7 @@ const uploadArquivos = async (req, res) => {
 
         const { data, error } = await supabase
             .storage
-            .from(process.env.SUPABASE_BUCKET)
+            .from("pdv")
             .upload(nome, buffer);
 
         if (error) {
@@ -24,7 +24,7 @@ const uploadArquivos = async (req, res) => {
 
         const { publicURL, errorPublicUrl } = supabase
             .storage
-            .from(process.env.SUPABASE_BUCKET)
+            .from("pdv")
             .getPublicUrl(nome);
 
         if (errorPublicUrl) {
