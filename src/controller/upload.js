@@ -22,7 +22,7 @@ const uploadArquivos = async (req, res) => {
             return res.status(500).json({ mensagem: error.message });
         }
 
-        const { publicURL, errorPublicUrl } = supabase
+        const { publicURL, error: errorPublicUrl } = supabase
             .storage
             .from(process.env.SUPABASE_BUCKET)
             .getPublicUrl(nome);
