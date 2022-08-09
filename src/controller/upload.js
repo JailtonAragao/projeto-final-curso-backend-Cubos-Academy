@@ -11,10 +11,12 @@ const uploadArquivos = async (req, res) => {
 
         await schemaUpload.validations(req.body);
 
+        const dia = new Date();
+
         const { data, error } = await supabase
             .storage
             .from(process.env.SUPABASE_BUCKET)
-            .upload(new Date(), buffer);
+            .upload(dia, buffer);
 
         if (error) {
             return res.status(500).json({ mensagem: error.message });
@@ -23,7 +25,7 @@ const uploadArquivos = async (req, res) => {
         const { publicURL, errorPublicUrl } = supabase
             .storage
             .from(process.env.SUPABASE_BUCKET)
-            .getPublicUrl(new Date());
+            .getPublicUrl(dia);
 
         if (errorPublicUrl) {
             return res.status(500).json({ mensagem: error.message });
