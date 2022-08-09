@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 const { supabase } = require('../config/supabase');
-const knex = require('../config/conexao');
 
 const { schemaUpload } = require('../validations/schemaUpload')
 
@@ -40,5 +38,3 @@ const uploadArquivos = async (req, res) => {
 module.exports = {
     uploadArquivos
 }
-=======
->>>>>>> 4b0df27bb8f8db568ad936437b40f738267c1ff2

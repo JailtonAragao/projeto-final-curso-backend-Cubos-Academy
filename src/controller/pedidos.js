@@ -18,14 +18,10 @@ const cadastrarPedido = async (req, res) => {
             return res.status(404).json({ mensagem: 'Cliente não encontrado' });
         }
 
-        const produtoExiste = await knex('produtos');
-
         let produtosNaoEncontrados = [];
         let produtosEncontrados = [];
         let produtosSemEstoque = [];
-        let valorTotal = 0;
-
-        // BLOCO PARA ENCONTRAR PRODUTOS
+        let valor_total = 0;
 
         for (const itemPedido of pedido_produtos) {
 
@@ -37,15 +33,18 @@ const cadastrarPedido = async (req, res) => {
                 produtosSemEstoque.push(itemPedido);
             } else {
                 produtosEncontrados.push(itemPedido);
-                valorTotal += produto.valor * itemPedido.quantidade_produto
+                valor_total += produto.valor * itemPedido.quantidade_produto
             }
         }
 
-        return res.json(valorTotal);
-
         if (produtosNaoEncontrados.length == 0 && produtosSemEstoque.length === 0) {
 
+            const cadastrarPedido = await knex('pedidos')
+                .insert({ cliente_id, observacao, valor_total })
+                .returning('*');
+
             for (const itemPedido of produtosEncontrados) {
+
                 const produto = await knex('produtos').where({ id: itemPedido.produto_id }).first();
 
                 let retirarEstoque = produto.quantidade_estoque - itemPedido.quantidade_produto;
@@ -54,37 +53,33 @@ const cadastrarPedido = async (req, res) => {
                     .update({ quantidade_estoque: retirarEstoque })
                     .where({ id: itemPedido.produto_id })
 
-                const cadastrarPedido = await knex('pedidos')
-                    .insert({ cliente_id, observacao })
-                    .returning('*');
-
-                const encontrarPedido = await knex('pedidos')
-                    .where({ id: cliente_id }).first();
-
                 await knex('pedido_produtos')
                     .insert({
-                        pedido_id: encontrarPedido.id,
-                        produto_id: itemPedido.produto_id,
+                        pedido_id: cadastrarPedido[0].id,
+                        produto_id: produto.id,
                         quantidade_produto: itemPedido.quantidade_produto,
-                        valor_produto: findById.valor
+                        valor_produto: produto.valor
                     });
-
             }
 
             return res.status(200).json({ mensagem: "Pedido cadastrado" });
 
         } else {
             return res.status(404).json({
-                "mensagem": "Os Produtos a seguir não foram encontrados",
-                "Produtos não encontrados": produtosNaoEncontrados
+                "mensagem": "Os Produtos a seguir não foram encontrados ou a quantidade de estoque é inválida",
+                "Produtos não encontrados": produtosNaoEncontrados,
+                "Produtos em estoque": produtosSemEstoque
             });
         }
     } catch (error) {
-        return
+        return res.status(500).json({ mensagem: error.message });
     }
 }
 
+
 const listarPedidos = async (req, res) => {
+    const { cliente_id } = req.query;
+
 
 }
 
