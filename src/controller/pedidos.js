@@ -78,7 +78,25 @@ const cadastrarPedido = async (req, res) => {
 
 
 const listarPedidos = async (req, res) => {
-    const { cliente_id } = req.query;
+    const { cliente_id } = req.query
+
+    try {
+
+        if (!cliente_id) {
+            const listarTodos = await knex('pedidos')
+                .join('pedido_produtos', 'pedidos.id', 'pedido_produtos.pedido_id');
+            return res.status(200).json(listarTodos);
+        } else {
+            const categoriaProdutoExiste = await knex('produtos').where({ categoria_id }).first();
+
+            if (!categoriaProdutoExiste) {
+                return res.status(404).json({ mensagem: 'Não existe produtos cadastrados com a categoria_id informada.' });
+            }
+            return res.status(200).json(categoriaProdutoExiste);
+        }
+    } catch (error) {
+        return res.status(500).json({ mensagem: error.message });
+    }
 
 
 }

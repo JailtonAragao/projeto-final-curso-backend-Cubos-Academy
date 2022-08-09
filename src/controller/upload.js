@@ -3,20 +3,23 @@ const { supabase } = require('../config/supabase');
 const { schemaUpload } = require('../validations/schemaUpload')
 
 const uploadArquivos = async (req, res) => {
-    const { nome, url_produto } = req.body
+    const { url_produto } = req.body
 
     const buffer = Buffer.from(url_produto, 'base64');
 
     try {
 
-        await schemaUpload.validations(req.body);
+        await schemaUpload.validate(req.body);
 
-        // const dia = new Date();
+        const dia = new Date() + 1;
+        const diaFormatado = String(dia) + 'jpg';
+
+        console.log(dia);
 
         const { data, error } = await supabase
             .storage
             .from(process.env.SUPABASE_BUCKET)
-            .upload(nome, buffer);
+            .upload(dia, buffer);
 
         if (error) {
             return res.status(500).json({ mensagem: error.message });
@@ -25,7 +28,7 @@ const uploadArquivos = async (req, res) => {
         const { publicURL, error: errorPublicUrl } = supabase
             .storage
             .from(process.env.SUPABASE_BUCKET)
-            .getPublicUrl(nome);
+            .getPublicUrl(dia);
 
         if (errorPublicUrl) {
             return res.status(500).json({ mensagem: errorPublicUrl.message });
