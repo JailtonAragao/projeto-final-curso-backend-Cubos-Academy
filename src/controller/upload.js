@@ -28,7 +28,7 @@ const uploadArquivos = async (req, res) => {
             .getPublicUrl(nome);
 
         if (errorPublicUrl) {
-            return res.status(500).json({ mensagem: error.message });
+            return res.status(500).json({ mensagem: errorPublicUrl.message });
         }
         return res.status(201).json(publicURL);
 
