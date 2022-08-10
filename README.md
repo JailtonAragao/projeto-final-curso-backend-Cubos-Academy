@@ -519,10 +519,15 @@ Critérios de aceite:
 
 Essa é a rota que será utilizada para fazer o upload de uma imagem no servidor de armazenamento.
 
+**Atenção:** O nome da imagem deverá ser gerado, de modo, que não deverá ser passada a propriedade relacionada ao nome da imagem.
+
+**Lembre-se:** Cada imagem deverá ter um nome gerado exclusivo, ou seja, não poderá ter risco de uma imagem possuir o mesmo nome de uma outra já existente no servidor de armazenamento.
+
 Critérios de aceite:
 
-    - Validar se a propriedade `url_produto`, foi informada no corpo da requisição.
-    - Enviar a imagem para o servidor de armazenamento e obter a URL da imagem que teve upload concluído.
+    - Validar se a propriedade `imagem`, foi informada no corpo da requisição.
+    - Receber a propriedade `imagem` em formato base64 e enviar para o servidor de armazenamento.
+    - Obter e retornar a URL da imagem que teve upload concluído.
 
 </details>
 
