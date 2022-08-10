@@ -83,22 +83,46 @@ const listarPedidos = async (req, res) => {
     try {
 
         if (!cliente_id) {
-            const listarTodos = await knex('pedidos')
-                .join('pedido_produtos', 'pedidos.id', 'pedido_produtos.pedido_id');
+            const listarTodos = await knex('pedido_produtos')
+                .join('pedidos', 'pedido_produtos.pedido_id', 'pedidos.id');
             return res.status(200).json(listarTodos);
-        } else {
-            const categoriaProdutoExiste = await knex('produtos').where({ categoria_id }).first();
-
-            if (!categoriaProdutoExiste) {
-                return res.status(404).json({ mensagem: 'Não existe produtos cadastrados com a categoria_id informada.' });
+            for (const item of listarTodos) {
+                return res.status(200).json(item);
+                //     {
+                //     pedido: {
+                //         id: item.id,
+                //         valor_total: item.valor_total,
+                //         observacao: item.observacao,
+                //         cliente_id: item.cliente_id
+                //     },
+                //     pedido_produtos: [
+                //         {
+                //             id: item.id,
+                //             quantidade_produto: item.quantidade_produto,
+                //             valor_produto: item.valor_produto,
+                //             pedido_id: item.pedido_id,
+                //             produto_id: item.produto_id,
+                //         }
+                //     ]
+                // })
             }
-            return res.status(200).json(categoriaProdutoExiste);
+        } else {
+            const clienteExiste = await knex('pedidos').where({ cliente_id }).first();
+
+            if (!clienteExiste) {
+                return res.status(404).json({ mensagem: 'Não existe produtos cadastrados com o cliente_id informado.' });
+            }
+            const listarCliente = await knex('pedidos')
+                .join('pedido_produtos', 'pedidos.id', 'pedido_produtos.pedido_id')
+                .where({ cliente_id })
+                .select('pedidos.*', 'pedido_produtos.*');
+
+
+            return res.status(200).json(listarCliente);
         }
     } catch (error) {
         return res.status(500).json({ mensagem: error.message });
     }
-
-
 }
 
 module.exports = {
