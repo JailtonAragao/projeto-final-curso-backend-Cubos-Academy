@@ -512,7 +512,7 @@ Critérios de aceite:
 </details>
 
 <details>
-<summary><b>Upload de imagem do produto</b></summary>
+<summary><b>Upload de imagem</b></summary>
 <br>
 
 #### `POST` `/upload`
