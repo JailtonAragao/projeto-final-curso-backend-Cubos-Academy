@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/diegoandrade2022/desafio-backend-final-dbe-t01#readme",
   "dependencies": {
+    "@supabase/supabase-js": "^1.35.6",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
