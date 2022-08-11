@@ -23,8 +23,6 @@ const cadastrarPedido = async (req, res) => {
         let produtosSemEstoque = [];
         let valor_total = 0;
 
-        // BLOCO PARA ENCONTRAR PRODUTOS
-
         for (const itemPedido of pedido_produtos) {
 
             const produto = await knex('produtos').where({ id: itemPedido.produto_id }).first();
@@ -39,13 +37,13 @@ const cadastrarPedido = async (req, res) => {
             }
         }
 
-        if (produtosNaoEncontrados.length == 0 && produtosSemEstoque.length === 0) {
+        if (produtosNaoEncontrados.length === 0 && produtosSemEstoque.length === 0) {
 
             const cadastrarPedido = await knex('pedidos')
-                    .insert({ cliente_id, observacao, valor_total })
-                    .returning('*');
-            
-            for (const itemPedido of produtosEncontrados) {            
+                .insert({ cliente_id, observacao, valor_total })
+                .returning('*');
+
+            for (const itemPedido of produtosEncontrados) {
 
                 const produto = await knex('produtos').where({ id: itemPedido.produto_id }).first();
 
@@ -87,42 +85,42 @@ const listarPedidos = async (req, res) => {
 
         if (!cliente_id) {
             listarTodos = await knex('pedidos');
-        
+
         } else {
             const clienteExiste = await knex('pedidos').where({ cliente_id }).first();
 
             if (!clienteExiste) {
                 return res.status(404).json({ mensagem: 'Não existe produtos cadastrados com o cliente_id informado.' });
             }
-            
+
             listarTodos = await knex('pedidos').where({ cliente_id })
         }
-        
-            const pedidoFinais = [];
-            
-            for (const pedido of listarTodos) {
-                const pedidoPorId = await knex('pedido_produtos').where({ pedido_id: pedido.id });
-                const pedidoFormatado = {
-                    pedido: {
-                        id: pedido.id,
-                        valor_total: pedido.valor_total,
-                        observacao: pedido.observacao,
-                        cliente_id: pedido.cliente_id
-                    },
-                    pedido_produtos: pedidoPorId.map(pp => ({
-                        id: pp.id,
-                        quantidade_produto: pp.quantidade_produto,
-                        valor_produto: pp.valor_produto,
-                        pedido_id: pp.pedido_id,
-                        produto_id: pp.produto_id,
-                    }))
-                }
 
-                pedidoFinais.push(pedidoFormatado);
+        const pedidoFinais = [];
+
+        for (const pedido of listarTodos) {
+            const pedidoPorId = await knex('pedido_produtos').where({ pedido_id: pedido.id });
+            const pedidoFormatado = {
+                pedido: {
+                    id: pedido.id,
+                    valor_total: pedido.valor_total,
+                    observacao: pedido.observacao,
+                    cliente_id: pedido.cliente_id
+                },
+                pedido_produtos: pedidoPorId.map(pp => ({
+                    id: pp.id,
+                    quantidade_produto: pp.quantidade_produto,
+                    valor_produto: pp.valor_produto,
+                    pedido_id: pp.pedido_id,
+                    produto_id: pp.produto_id,
+                }))
             }
 
-            return res.status(200).json(pedidoFinais);
-            
+            pedidoFinais.push(pedidoFormatado);
+        }
+
+        return res.status(200).json(pedidoFinais);
+
     } catch (error) {
         return res.status(500).json({ mensagem: error.message });
     }
