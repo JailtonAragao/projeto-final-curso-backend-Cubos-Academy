@@ -68,7 +68,7 @@ const cadastrarPedido = async (req, res) => {
             return res.status(404).json({
                 "mensagem": "Os Produtos a seguir não foram encontrados ou a quantidade de estoque é inválida",
                 "Produtos não encontrados": produtosNaoEncontrados,
-                "Produtos em estoque": produtosSemEstoque
+                "Produtos sem estoque": produtosSemEstoque
             });
         }
     } catch (error) {
