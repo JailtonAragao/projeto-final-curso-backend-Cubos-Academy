@@ -139,6 +139,15 @@ const excluirProduto = async (req, res) => {
             return res.status(404).json({ mensagem: "O produto não existe em nosso banco de dados." });
         }
 
+        const pedidoExiste = await knex('pedido_produtos').where({ produto_id: id }).first();
+
+        if (pedidoExiste) {
+            return res.status(404).json({
+                mensagem: "Não é possível deletar um produto vinculado a um pedido existente",
+                "Pedido Existente": pedidoExiste
+            });
+        }
+
         if (produtoExiste.produto_imagem || produtoExiste.produto_imagem !== null) {
 
             const array = produtoExiste.produto_imagem.split("/");
