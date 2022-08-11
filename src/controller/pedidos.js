@@ -96,7 +96,7 @@ const listarPedidos = async (req, res) => {
             listarTodos = await knex('pedidos').where({ cliente_id })
         }
 
-        const pedidoFinais = [];
+        const extratoPedidos = [];
 
         for (const pedido of listarTodos) {
             const pedidoPorId = await knex('pedido_produtos').where({ pedido_id: pedido.id });
@@ -116,10 +116,10 @@ const listarPedidos = async (req, res) => {
                 }))
             }
 
-            pedidoFinais.push(pedidoFormatado);
+            extratoPedidos.push(pedidoFormatado);
         }
 
-        return res.status(200).json(pedidoFinais);
+        return res.status(200).json(extratoPedidos);
 
     } catch (error) {
         return res.status(500).json({ mensagem: error.message });
