@@ -139,20 +139,6 @@ const excluirProduto = async (req, res) => {
             return res.status(404).json({ mensagem: "O produto não existe em nosso banco de dados." });
         }
 
-        if (produtoExiste.produto_imagem || produtoExiste.produto_imagem !== null) {
-
-            const array = produtoExiste.produto_imagem.split("/");
-            const nome = array[8];
-
-            const { data, error } = await supabase
-                .storage
-                .from(process.env.SUPABASE_BUCKET)
-                .remove(nome);
-
-            if (error) {
-                return res.status(500).json({ mensagem: error.message });
-            }
-        }
         const deletarProduto = await knex('produtos').where({ id }).del();
 
         if (!deletarProduto) {
