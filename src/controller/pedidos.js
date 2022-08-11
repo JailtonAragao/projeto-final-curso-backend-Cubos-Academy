@@ -78,11 +78,54 @@ const cadastrarPedido = async (req, res) => {
     }
 }
 
-
 const listarPedidos = async (req, res) => {
-    const { cliente_id } = req.query;
+    const { cliente_id } = req.query
 
+    try {
 
+        let listarTodos;
+
+        if (!cliente_id) {
+            listarTodos = await knex('pedidos');
+        
+        } else {
+            const clienteExiste = await knex('pedidos').where({ cliente_id }).first();
+
+            if (!clienteExiste) {
+                return res.status(404).json({ mensagem: 'Não existe produtos cadastrados com o cliente_id informado.' });
+            }
+            
+            listarTodos = await knex('pedidos').where({ cliente_id })
+        }
+        
+            const pedidoFinais = [];
+            
+            for (const pedido of listarTodos) {
+                const pedidoPorId = await knex('pedido_produtos').where({ pedido_id: pedido.id });
+                const pedidoFormatado = {
+                    pedido: {
+                        id: pedido.id,
+                        valor_total: pedido.valor_total,
+                        observacao: pedido.observacao,
+                        cliente_id: pedido.cliente_id
+                    },
+                    pedido_produtos: pedidoPorId.map(pp => ({
+                        id: pp.id,
+                        quantidade_produto: pp.quantidade_produto,
+                        valor_produto: pp.valor_produto,
+                        pedido_id: pp.pedido_id,
+                        produto_id: pp.produto_id,
+                    }))
+                }
+
+                pedidoFinais.push(pedidoFormatado);
+            }
+
+            return res.status(200).json(pedidoFinais);
+            
+    } catch (error) {
+        return res.status(500).json({ mensagem: error.message });
+    }
 }
 
 module.exports = {
