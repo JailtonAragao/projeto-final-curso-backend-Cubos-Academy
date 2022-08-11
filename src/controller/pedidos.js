@@ -23,8 +23,6 @@ const cadastrarPedido = async (req, res) => {
         let produtosSemEstoque = [];
         let valor_total = 0;
 
-        // BLOCO PARA ENCONTRAR PRODUTOS
-
         for (const itemPedido of pedido_produtos) {
 
             const produto = await knex('produtos').where({ id: itemPedido.produto_id }).first();
