@@ -39,7 +39,7 @@ const cadastrarProduto = async (req, res) => {
 const editarProduto = async (req, res) => {
     const { id } = req.params;
 
-    const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
+    const { descricao, quantidade_estoque, valor, categoria_id, produto_imagem } = req.body;
 
     try {
 
@@ -57,8 +57,21 @@ const editarProduto = async (req, res) => {
             return res.status(404).json({ mensagem: 'A categoria informada não existe em nosso banco de dados.' })
         }
 
+        if (produtoExiste.produto_imagem && produtoExiste.produto_imagem !== null) {
+            await knex('produtos').update('produto_imagem', null);
+
+            const { data, error } = await supabase
+                .storage
+                .from(process.env.SUPABASE_BUCKET)
+                .remove(produtoExiste.produto_imagem);
+
+            if (error) {
+                return res.status(500).json({ mensagem: error.message });
+            }
+        }
+
         const editarProduto = await knex('produtos')
-            .update({ descricao, quantidade_estoque, valor, categoria_id })
+            .update({ descricao, quantidade_estoque, valor, categoria_id, produto_imagem })
             .where({ id });
 
         if (!editarProduto) {

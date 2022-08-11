@@ -3,9 +3,9 @@ const { supabase } = require('../config/supabase');
 const { schemaUpload } = require('../validations/schemaUpload')
 
 const uploadArquivos = async (req, res) => {
-    const { url_produto } = req.body
+    const { imagem } = req.body
 
-    const buffer = Buffer.from(url_produto, 'base64');
+    const buffer = Buffer.from(imagem, 'base64');
 
     try {
 
